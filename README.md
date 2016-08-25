@@ -84,7 +84,7 @@ $ ps fx | grep bash
  3324 pts/0    S+     0:00  |   |           \_ grep --colour=auto bash
 ```
 
-Now that `bashtard` has been created, let's execute and while it sleeps we'll check again.
+Now that `bashtard` has been created, do `./shabang-bashtard.sh` and while it sleeps we'll check again.
 
 ```
 $ ps fx | grep bash
