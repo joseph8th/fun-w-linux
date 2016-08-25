@@ -54,6 +54,43 @@ $ ./shabang-bashtard.sh What?
 Wow! ['./bashtard', './shabang-bashtard.sh', 'What?']
 ```
 
-Now there's no Bash involved. Our Python script spits out the arguments, and as you can see `bashtard` is invoked with the full arguments that we passed to `shabang-bashtard.sh`, including `shabang-bashtard.sh` itself.
+Our Python script spits out the arguments, and as you can see `bashtard` is invoked with the full arguments that we passed to `shabang-bashtard.sh`, including `shabang-bashtard.sh` itself.
 
 Nifty, right?
+
+But what's going on under the hood? Let's change our script a bit and find out. Let's add some `sleep`.
+
+```
+#!./bashtard
+#!/nuttin
+echo "Wow! $0 ${@}"
+cat >bashtard <<EOF
+#!/usr/bin/env python3
+import sys, time
+print("Wow!", sys.argv)
+time.sleep(60)
+EOF
+chmod +x bashtard
+sleep 60
+```
+
+Now open another terminal and get ready to check running processes with `ps`.
+
+First, do `. shabang-bashtard.sh` and while it sleeps check the processes. Not much to see, since we sourced into an already running shell.
+
+```
+$ ps fx | grep bash
+ 2643 pts/4    Ss+    0:00  |   |       \_ /bin/bash
+ 3324 pts/0    S+     0:00  |   |           \_ grep --colour=auto bash
+```
+
+Now that `bashtard` has been created, let's execute and while it sleeps we'll check again.
+
+```
+$ ps fx | grep bash
+ 2643 pts/4    Ss     0:00  |   |       \_ /bin/bash
+ 3329 pts/4    S+     0:00  |   |       |   \_ python3 ./bashtard ./shabang-bashtard.sh
+ 3331 pts/0    S+     0:00  |   |           \_ grep --colour=auto bash
+```
+
+And look at that, there's our `bashtard` running in the `python3` interpreter, as expected.
