@@ -60,7 +60,7 @@ Nifty, right?
 
 But what's going on under the hood? Let's change our script a bit and find out. Let's add some `sleep`.
 
-```
+```bash
 #!./bashtard
 #!/nuttin
 echo "Wow! $0 ${@}"
